@@ -1,3 +1,5 @@
+'''Solving exploit - explore delema for 3 bandits using
+epsilon greedy approach'''
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt

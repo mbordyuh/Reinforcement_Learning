@@ -1,3 +1,6 @@
+"""
+Solve carpole problem with random weight search
+"""
 import gym
 import numpy as np
 

@@ -1,5 +1,5 @@
 """
-Solve carpole problem with random weight search
+Solve cartpole problem with random weight search
 """
 import gym
 import numpy as np

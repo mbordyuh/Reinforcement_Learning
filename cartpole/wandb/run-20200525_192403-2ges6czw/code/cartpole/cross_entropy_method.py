@@ -6,6 +6,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import wandb
+from pytorch_lightning.loggers import WandbLogger
+import os
 
 HIDDEN_SIZE = 128
 BATCH_SIZE = 16
@@ -73,6 +75,7 @@ def filter_batch(batch, percentile):
 
 def main():
 
+    # os.environ["WANDB_API_KEY"] = hparams.wandb_api_key
     wandb.init(name='Cross-Entropy', project='cartpole')
     env = gym.make("CartPole-v0")
     obs_size = env.observation_space.shape[0]
@@ -91,13 +94,17 @@ def main():
         loss_v.backward()
         optimizer.step()
         wandb.log({'iter_number': iter_no,
-                   'loss': loss_v.item(),
-                   'reward_mean': reward_m,
-                   'reward_bound': reward_b})
+                  'loss': loss_v.item(),
+                  'reward_mean': reward_m,
+                  'reward_bound': reward_b})
         if reward_m >= 200:
             print("Solved!")
             break
 
-
 if __name__ == "__main__":
     main()
+
+
+
+
+

@@ -1,0 +1,58 @@
+diff --git a/cartpole/cross_entropy_method.py b/cartpole/cross_entropy_method.py
+index b05bb1d..d245c0b 100644
+--- a/cartpole/cross_entropy_method.py
++++ b/cartpole/cross_entropy_method.py
+@@ -5,7 +5,9 @@ import numpy as np
+ import torch
+ import torch.nn as nn
+ import torch.optim as optim
+-
++import wandb
++from pytorch_lightning.loggers import WandbLogger
++import os
+ 
+ HIDDEN_SIZE = 128
+ BATCH_SIZE = 16
+@@ -71,17 +73,18 @@ def filter_batch(batch, percentile):
+     train_act_v = torch.LongTensor(train_act)
+     return train_obs_v, train_act_v, reward_bound, reward_mean
+ 
++def main():
+ 
+-if __name__ == "__main__":
++    # os.environ["WANDB_API_KEY"] = hparams.wandb_api_key
++    wandb.init(name='Cross-Entropy', project='cartpole')
+     env = gym.make("CartPole-v0")
+-    # env = gym.wrappers.Monitor(env, directory="mon", force=True)
+     obs_size = env.observation_space.shape[0]
+     n_actions = env.action_space.n
+ 
+     net = Net(obs_size, HIDDEN_SIZE, n_actions)
++
+     objective = nn.CrossEntropyLoss()
+     optimizer = optim.Adam(params=net.parameters(), lr=0.01)
+-    writer = SummaryWriter(comment="-cartpole")
+ 
+     for iter_no, batch in enumerate(iterate_batches(env, net, BATCH_SIZE)):
+         obs_v, acts_v, reward_b, reward_m = filter_batch(batch, PERCENTILE)
+@@ -90,9 +93,18 @@ if __name__ == "__main__":
+         loss_v = objective(action_scores_v, acts_v)
+         loss_v.backward()
+         optimizer.step()
+-        print(f"{ iter_no}: loss={loss_v.item()}, reward_mean={reward_m}, reward_bound={reward_b}")
++        wandb.log({'iter_number': iter_no,
++                  'loss': loss_v.item(),
++                  'reward_mean': reward_m,
++                  'reward_bound': reward_b})
+         if reward_m >= 200:
+             print("Solved!")
+             break
+-    writer.close()
++
++if __name__ == "__main__":
++    main()
++
++
++
++
+ 

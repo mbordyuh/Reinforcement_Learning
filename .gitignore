@@ -33,6 +33,9 @@ wheels/
 *.manifest
 *.spec
 
+# Wandb logging
+wandb/
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

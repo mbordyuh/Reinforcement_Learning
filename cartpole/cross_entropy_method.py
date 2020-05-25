@@ -1,5 +1,5 @@
 """
-Cross-entropy implementation for carpole model
+Cross-entropy implementation for cartpole problem
 """
 import gym
 from collections import namedtuple

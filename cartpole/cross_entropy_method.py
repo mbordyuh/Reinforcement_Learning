@@ -1,4 +1,6 @@
-""
+"""
+Cross-entropy implementation for carpole model
+"""
 import gym
 from collections import namedtuple
 import numpy as np
